@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf 8">
+        <link rel = "stylesheet" href = "css.css">
+
+ </head>
+ <body>
+          
+
+
+
+
+<div class="main">
+    <div class="winline none animation"></div>
+
+    <div class="cells">
+        <div class="row">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+        <div class="row">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+        <div class="row">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+
+
+    </div>
+
+</div >
+
+<div class="reload"> НАЧАТЬ ЗАНОВО </div>
+
+
+
+
+
+    <script>
+
+let cells = document.querySelectorAll('.cell');
+let line = document.querySelector('.winline');
+let reload = document.querySelector('.reload');
+let i = 0;
+
+function turn() {
+    this.innerHTML = '<div></div>';
+    let bee = this.querySelector('div');
+    bee.classList.add(['x','circle'][i%2]);
+    this.classList.add(['xmark', 'cmark'][i%2]);
+    this.removeEventListener('click', turn);
+    i++;
+    win(cells, line, i);
+    console.log(i)
+
+}
+for (let cell of cells) {cell.addEventListener('click', turn)}
+
+
+
+
+
+function win(cells, line, i) {
+    let combs = {
+	hor1: [0, 1, 2],
+	orig: [3, 4, 5],
+	hor3: [6, 7, 8],
+	vert1: [0, 3, 6],
+	vert2: [1, 4, 7],
+	vert3: [2, 5, 8],
+	lefttop: [0, 4, 8],
+	righttop: [2, 4, 6],
+    };
+    let iswin = false;
+    
+    for (let comb in combs) {
+        console.log(iswin)
+        if (
+            cells[combs[comb][0]].className == cells[combs[comb][1]].className && 
+            cells[combs[comb][1]].className == cells[combs[comb][2]].className &&
+            cells[combs[comb][0]].className == 'cell xmark') { 
+            line.classList.add(comb);
+            line.classList.remove('none');
+            iswin = true;
+            console.log(i, iswin)
+            for (let k of cells) {
+            k.removeEventListener('click', turn);
+        }
+
+              }
+        if (
+            cells[combs[comb][0]].className == cells[combs[comb][1]].className && 
+            cells[combs[comb][1]].className == cells[combs[comb][2]].className &&
+            cells[combs[comb][0]].className == 'cell cmark') {
+            line.classList.add(comb);
+            line.classList.remove('none');
+            iswin = true;
+            for (let k of cells) {
+            k.removeEventListener('click', turn)
+        }
+            }
+    }
+    if ((i==9) && (iswin == false)) {
+            return(alert('draw'))
+        }
+}
+
+
+reload.addEventListener('click', function re(){
+    for (let elem of cells) {
+        elem.innerHTML = ''
+        elem.classList.remove('xmark');
+        elem.classList.remove('cmark');
+        elem.addEventListener('click', turn);
+        i = 0;
+        line.className = 'winline none animation'
+
+    }
+})
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </body>
+
+        </html>
